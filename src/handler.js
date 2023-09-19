@@ -3,14 +3,14 @@ const books = require('./books');
 
 const addBookHandler = (request, h) => {
   const {
-    title, author, publisher, year,
+    name, year, author, summary, publisher, pageCount, readPage, reading,
   } = request.payload;
   const id = nanoid(16);
-  const createdAt = new Date().toISOString();
-  const updatedAt = createdAt;
+  const insertedAt = new Date().toISOString();
+  const updatedAt = insertedAt;
 
   const newBook = {
-    title, author, publisher, year, id, createdAt, updatedAt,
+    id, name, year, author, summary, publisher, pageCount, readPage, reading, insertedAt, updatedAt,
   };
 
   books.push(newBook);
@@ -49,7 +49,7 @@ const getBookByIdHandler = (request, h) => {
   const book = books.filter((b) => b.id === id)[0];
   if (book !== undefined) {
     return {
-      status: 'succes',
+      status: 'success',
       data: {
         book,
       },
