@@ -5,12 +5,30 @@ const addBookHandler = (request, h) => {
   const {
     name, year, author, summary, publisher, pageCount, readPage, reading,
   } = request.payload;
+
+  // validasi input name and pageread
+  if (!name) {
+    return h.response({
+      status: 'fail',
+      message: 'mohon untuk memasukkan nama buku',
+    }).code(400);
+  }
+
+  if (readPage > pageCount) {
+    return h.response({
+      status: 'fail',
+      message: 'read page tidak boleh lebih besar dari pagecount',
+    }).code(400);
+  }
+
   const id = nanoid(16);
   const insertedAt = new Date().toISOString();
   const updatedAt = insertedAt;
+  const finished = pageCount === readPage;
 
   const newBook = {
-    id, name, year, author, summary, publisher, pageCount, readPage, reading, insertedAt, updatedAt,
+    // eslint-disable-next-line max-len
+    id, name, year, author, summary, publisher, pageCount, readPage, reading, insertedAt, updatedAt, finished,
   };
 
   books.push(newBook);
@@ -43,6 +61,7 @@ const allBookHandler = () => ({
     books,
   },
 });
+
 const getBookByIdHandler = (request, h) => {
   const { id } = request.params;
 
